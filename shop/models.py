@@ -9,6 +9,11 @@ class Category(models.Model):
     body = models.TextField(verbose_name=_('body'), blank=True)
     
 
+class Discount(models.Model):
+    discount = models.FloatField(verbose_name=_('discount'))
+    description = models.TextField(verbose_name=_('description'))
+    
+
 class Product(models.Model):
     title = models.CharField(max_length=150, verbose_name=_('title'))
     description = models.TextField(verbose_name=_('description'))
@@ -17,6 +22,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to='product_image', null=True, blank=True)
     inventory = models.PositiveSmallIntegerField()
+    discount = models.ManyToManyField('Discount', blank=True)
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_('date of modified'))
     
@@ -29,7 +35,11 @@ class Customer(models.Model):
     email = models.EmailField(verbose_name=_('email'), blank=True, null=True)
     
     
-
+class Address(models.Model):
+    customer = models.OneToOneField("Customer", on_delete=models.CASCADE, primary_key=True)
+    province = models.CharField(max_length=100, verbose_name=_('province'))
+    city = models.CharField(max_length=100, verbose_name=_('city'))
+    street = models.TextField(verbose_name=_('street'))
 
     
 class Order(models.Model):
@@ -45,6 +55,29 @@ class Order(models.Model):
     customer = models.ForeignKey('Customer', on_delete=models.PROTECT, related_name='order')
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default=ORDER_STATUS_UNPAID)
+    
+    
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='items')
+    product = models.ForeignKey('Product', on_delete=models.PROTECT, related_name='items')
+    quantity = models.PositiveSmallIntegerField(default=1, verbose_name=_('quantity'))
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    
+    class Meta:
+        unique_together = [['order', 'product']]
+        
+        
+class Cart(models.Model):
+    created_at = models.DateTimeField(default=timezone.now, verbose_name=_('created_at'))
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey('Cart', on_delete=models.PROTECT, related_name='items')
+    product = models.ForeignKey('Product', on_delete=models.PROTECT, related_name='items')
+    quantity = models.PositiveSmallIntegerField(default=1, verbose_name=_('quantity'))
+    
+    class Meta:
+        unique_together = [['cart', 'product']]
 
 
 class Comment(models.Model):
