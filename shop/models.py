@@ -32,7 +32,7 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100, verbose_name=_('first_name'))    
     last_name = models.CharField(max_length=100, verbose_name=_('last_name'))
     phone_number = models.CharField(max_length=250, verbose_name=_('phone_number'))
-    birth_date = models.DateField(verbose_name=_('birthdate'))
+    birth_date = models.DateField(verbose_name=_('birthdate'), null=True, blank=True)
     email = models.EmailField(verbose_name=_('email'), blank=True, null=True)
     
     
@@ -46,11 +46,11 @@ class Address(models.Model):
 class Order(models.Model):
     ORDER_STATUS_PAID = 'P'
     ORDER_STATUS_UNPAID = 'UN'
-    ORDER_STATUS_WAITING = 'W'
+    ORDER_STATUS_CANCELED = 'C'
     ORDER_STATUS = (
         (ORDER_STATUS_UNPAID, 'Unpaid'),
         (ORDER_STATUS_PAID, 'Paid'),
-        (ORDER_STATUS_WAITING, 'Waiting')
+        (ORDER_STATUS_CANCELED, 'Canceled')
     )
     
     customer = models.ForeignKey('Customer', on_delete=models.PROTECT, related_name='orders')
@@ -62,7 +62,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='items')
     product = models.ForeignKey('Product', on_delete=models.PROTECT, related_name='order_items')
     quantity = models.PositiveSmallIntegerField(default=1, verbose_name=_('quantity'))
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     
     class Meta:
         unique_together = [['order', 'product']]
