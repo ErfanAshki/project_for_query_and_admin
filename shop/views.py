@@ -6,8 +6,6 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Product.objects.filter(datetime_created__year=2022)
-    queryset = Product.objects.filter(datetime_created__month=10)
-    queryset = Product.objects.filter(datetime_created__day=1)
+    queryset = Product.objects.filter(name__icontains='work', datetime_created__year=2021, inventory__gt=5)
     
     return render(request, 'shop/shop.html', {'products': list(queryset)})
