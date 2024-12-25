@@ -6,8 +6,9 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Customer.objects.filter(birth_date__isnull=True)
-    queryset = Customer.objects.filter(birth_date__isnull=False)
+    queryset = Product.objects.filter(category__id=620)
+    queryset = Product.objects.filter(category__title__icontains='think')
+    queryset = Address.objects.filter(customer__first_name__icontains='jay')
 
     
     return render(request, 'shop/shop.html', {'products': list(queryset)})
