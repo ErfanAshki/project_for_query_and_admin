@@ -7,9 +7,7 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Product.objects.all().order_by('unit_price')
-    queryset = Product.objects.filter(inventory__gt=90).order_by('-unit_price')
-    queryset = Product.objects.all().order_by('inventory')
-    queryset = Product.objects.all().order_by('inventory').reverse()
+    queryset = Product.objects.all().earliest('unit_price')
+    queryset = Product.objects.all().latest('unit_price')
 
-    return render(request, 'shop/shop.html', {'products': list(queryset)})
+    return render(request, 'shop/shop.html')
