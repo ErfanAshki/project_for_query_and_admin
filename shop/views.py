@@ -7,9 +7,6 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    # queryset = Comment.objects.select_related('product').all()
-    # return render(request, 'shop/shop.html', {'comments': list(queryset)})
-
-    queryset = Product.objects.prefetch_related('comments').select_related('category').all()
+    queryset = Order.objects.prefetch_related('items__product').select_related('customer').all()
     
-    return render(request, 'shop/shop.html', {'products': list(queryset)})
+    return render(request, 'shop/shop.html', {'orders': list(queryset)})
