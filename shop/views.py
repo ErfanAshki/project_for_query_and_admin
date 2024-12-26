@@ -7,7 +7,7 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Product.objects.defer('description', 'image', 'datetime_modified')
-    queryset = Product.objects.only('id', 'name', 'inventory', 'unit_price')
+    queryset = OrderItem.objects.select_related('order', 'product').all()
+    queryset = Product.objects.select_related('category').all()
 
     return render(request, 'shop/shop.html', {'products': list(queryset)})

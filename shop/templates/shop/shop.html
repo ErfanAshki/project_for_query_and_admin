@@ -5,12 +5,12 @@
 
 <body>
 
-    {% for order_item in order_items %}
-       order : {{order_item.order.id}} <br>
-       order_status : {{order_item.order.status}} <br>
-       order_inventory : {{order_item.product.inventory}} <br>
-       price : {{order_item.unit_price}} <br>
-       quantity : {{order_item.quantity}} <br>
+    {% for product in products %}
+       product : {{product.name}} <br>
+       product_category : {{product.category.id}} <br>
+       category_title : {{product.category.title}} <br>
+       price : {{product.unit_price}} <br>
+       inventory : {{product.inventory}} <br>
         ------------------------------------------------- <br>
     {% endfor %}
 
