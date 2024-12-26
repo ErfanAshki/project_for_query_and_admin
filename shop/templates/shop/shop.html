@@ -7,8 +7,10 @@
 
     {% for product in products %}
        product : {{product.name}} <br>
-       product_category : {{product.category.id}} <br>
-       category_title : {{product.category.title}} <br>
+       {% for order_item in product.order_items.all %}
+            id : {{order_item.id}} <br>
+            quantity : {{order_item.quantity}} <br>
+       {% endfor %}
        price : {{product.unit_price}} <br>
        inventory : {{product.inventory}} <br>
         ------------------------------------------------- <br>
