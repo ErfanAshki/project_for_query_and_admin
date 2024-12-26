@@ -5,16 +5,26 @@
 
 <body>
 
-    {% for product in products %}
-       product : {{product.name}} <br>
-       {% for order_item in product.order_items.all %}
-            id : {{order_item.id}} <br>
-            quantity : {{order_item.quantity}} <br>
-       {% endfor %}
-       price : {{product.unit_price}} <br>
-       inventory : {{product.inventory}} <br>
+    {% comment %} {% for comment in comments %}
+       body : {{comment.body}} <br>
+       name : {{comment.name}} <br>
+       status : {{comment.status}} <br>
+       product_id : {{comment.product.id}} <br>
+       product_name : {{comment.product.name}} <br>
         ------------------------------------------------- <br>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
+
+    {% for product in products %}
+    name : {{product.name}} <br>
+    unit_price : {{product.unit_price}} <br>
+        {% for comment in product.comments.all %}
+            comment_id : {{comment.id}} <br>
+            comment_name : {{comment.name}} <br>
+        {% endfor %}
+    category_id : {{product.category.id}} <br>
+    category_title : {{product.category.title}} <br>
+     ------------------------------------------------- <br>
+ {% endfor %}
 
 </body>
 </html>
