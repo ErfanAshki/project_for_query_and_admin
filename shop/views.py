@@ -7,8 +7,10 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Product.objects.aggregate(max_price=Max('unit_price'))
-    queryset = Product.objects.aggregate(min_inventory=Min('inventory'))
-    queryset = Product.objects.aggregate(sum_inventory=Sum('inventory'))
+    queryset = Product.objects.filter(inventory__gt=10).aggregate(number=Count('id'), avg_price=Avg('unit_price'))
+    queryset = OrderItem.objects.filter(product_id=4599).aggregate(number=Count('id'))
     
+    order_item_queryset = OrderItem.objects.values('product_id').distinct()
+    queryset = Product.objects.filter(id__in=order_item_queryset).aggregate(number_of_product=Count('id'))
+
     return render(request, 'shop/shop.html', {'orders': list(queryset)})
