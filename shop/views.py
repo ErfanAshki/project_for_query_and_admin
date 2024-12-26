@@ -7,11 +7,7 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Product.objects.values('id', 'name', 'inventory', 'datetime_created')
-    queryset = Product.objects.values_list('id', 'name', 'inventory', 'datetime_created')
-    queryset = Product.objects.values('id', 'name', 'inventory').order_by('-inventory')
-
-    order_item_queryset = OrderItem.objects.values('product_id').distinct()
-    queryset = Product.objects.filter(id__in=[order_item_queryset]).all()
+    queryset = Product.objects.defer('description', 'image', 'datetime_modified')
+    queryset = Product.objects.only('id', 'name', 'inventory', 'unit_price')
 
     return render(request, 'shop/shop.html', {'products': list(queryset)})
