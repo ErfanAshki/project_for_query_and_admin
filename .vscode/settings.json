@@ -5,6 +5,7 @@
         "pycache",
         "sqlparse",
         "tzdata",
+        "unpaided",
         "venv"
     ]
 }

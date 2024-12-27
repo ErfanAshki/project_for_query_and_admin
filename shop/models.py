@@ -48,6 +48,10 @@ class UnpaidOrderMethod(models.Manager):
         return self.get_queryset().filter(status=Order.ORDER_STATUS_UNPAID)
 
 
+class UnpaidOrderManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Order.ORDER_STATUS_UNPAID)
+
     
 class Order(models.Model):
     ORDER_STATUS_PAID = 'P'
@@ -64,7 +68,8 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default=ORDER_STATUS_UNPAID)
     
     # manager
-    objects = UnpaidOrderMethod()
+    objects = models.Manager()
+    unpaided = UnpaidOrderManager()
     
     
 class OrderItem(models.Model):
