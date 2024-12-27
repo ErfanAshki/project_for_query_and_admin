@@ -85,6 +85,11 @@ class ApprovedCommentMethod(models.Manager):
     def get_approved(self):
         return self.get_queryset().filter(status=Comment.COMMENT_STATUS_APPROVED)
     
+    
+class ApprovedCommentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Comment.COMMENT_STATUS_APPROVED)
+    
 
 class Comment(models.Model):
     COMMENT_STATUS_NOT_APPROVED = 'NA'
@@ -102,6 +107,7 @@ class Comment(models.Model):
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
 
     # managers
-    objects = ApprovedCommentMethod()
+    objects = models.Manager()
+    approved = ApprovedCommentManager()
     # approved_comment = ApprovedComment()
     
