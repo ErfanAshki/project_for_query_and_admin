@@ -7,6 +7,6 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Comment.approved.all()
+    queryset = Order.objects.get_unpaid()
     
     return render(request, 'shop/shop.html', {'order': list(queryset)})

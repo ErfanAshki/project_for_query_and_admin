@@ -42,6 +42,12 @@ class Address(models.Model):
     city = models.CharField(max_length=100, verbose_name=_('city'))
     address_detail = models.TextField(verbose_name=_('street'))
 
+
+class UnpaidOrderMethod(models.Manager):
+    def get_unpaid(self):
+        return self.get_queryset().filter(status=Order.ORDER_STATUS_UNPAID)
+
+
     
 class Order(models.Model):
     ORDER_STATUS_PAID = 'P'
@@ -56,6 +62,9 @@ class Order(models.Model):
     customer = models.ForeignKey('Customer', on_delete=models.PROTECT, related_name='orders')
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
     status = models.CharField(max_length=10, choices=ORDER_STATUS, default=ORDER_STATUS_UNPAID)
+    
+    # manager
+    objects = UnpaidOrderMethod()
     
     
 class OrderItem(models.Model):
