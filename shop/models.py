@@ -35,6 +35,9 @@ class Customer(models.Model):
     birth_date = models.DateField(verbose_name=_('birthdate'), null=True, blank=True)
     email = models.EmailField(verbose_name=_('email'), blank=True, null=True)
     
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
     
 class Address(models.Model):
     customer = models.OneToOneField("Customer", on_delete=models.CASCADE, primary_key=True)
