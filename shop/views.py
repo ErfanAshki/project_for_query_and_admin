@@ -7,6 +7,6 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = Order.unpaided.all()
+    queryset = Order.objects.get_by_status(status=Order.ORDER_STATUS_CANCELED)
     
     return render(request, 'shop/shop.html', {'order': list(queryset)})
