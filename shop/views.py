@@ -7,11 +7,6 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    # way one
-    queryset = OrderItem.objects.values('order_id'). \
-                    annotate(items_count=Count('order_id'))
-    
-    # way two
-    queryset = Order.objects.all().annotate(items_count=Count('items'))
+    queryset = Customer.objects.all().annotate(number_of_orders=Count('orders'))
     
     return render(request, 'shop/shop.html', {'order': list(queryset)})
