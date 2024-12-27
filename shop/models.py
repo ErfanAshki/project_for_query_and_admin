@@ -81,6 +81,11 @@ class CartItem(models.Model):
         unique_together = [['cart', 'product']]
 
 
+class ApprovedCommentMethod(models.Manager):
+    def get_approved(self):
+        return self.get_queryset().filter(status=Comment.COMMENT_STATUS_APPROVED)
+    
+
 class Comment(models.Model):
     COMMENT_STATUS_NOT_APPROVED = 'NA'
     COMMENT_STATUS_APPROVED = 'A'
@@ -96,3 +101,7 @@ class Comment(models.Model):
     status = models.CharField(max_length=20, choices=COMMENT_STATUS, default=COMMENT_STATUS_WAITING)
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
 
+    # managers
+    objects = ApprovedCommentMethod()
+    # approved_comment = ApprovedComment()
+    

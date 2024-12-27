@@ -7,10 +7,6 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    queryset = OrderItem.objects.all().annotate(total_price=ExpressionWrapper(\
-        F('unit_price') * F('quantity'), output_field=DecimalField()))
-    
-    queryset = OrderItem.objects.all().annotate(total_price=ExpressionWrapper(\
-        F('unit_price') * 0.9, output_field=DecimalField()))
+    queryset = Comment.objects.get_approved()
     
     return render(request, 'shop/shop.html', {'order': list(queryset)})
