@@ -2,24 +2,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from decimal import Decimal
 from django.db.models import Q, F, Avg, Count, Max, Min, Sum, Value, Func, ExpressionWrapper, DecimalField
+from django.db import transaction
 
 from .models import Product, Discount, Category, Comment, Customer, Address, Cart, CartItem, Order, OrderItem
 
 
+# @transaction.atomic()
 def some_view(request):
-    OrderItem.objects.filter(id=170).delete()
-    OrderItem.objects.filter(id=171).delete()
-    OrderItem.objects.filter(id=172).delete()
-    
-    Order.objects.filter(id=93).delete()
-    
-    Product.objects.filter(id=5003).delete()
-    Product.objects.filter(id=5004).delete()
-    
-    Category.objects.filter(id=701).delete()
-    Category.objects.filter(id=702).delete()
-    
-    
-    queryset = Category.objects.all().order_by('-id')
+    with transaction.atomic():
+        order = Order.objects.create(customer_id=311)
+
+        order_item1 = OrderItem.objects.create(
+            order=order,
+            product_id=4500.
+            quantity=5,
+            unit_price=100
+        )
     
     return render(request, 'shop/shop.html', {'products': list(queryset)})
