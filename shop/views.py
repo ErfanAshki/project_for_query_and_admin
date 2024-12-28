@@ -7,27 +7,17 @@ from .models import Product, Discount, Category, Comment, Customer, Address, Car
 
 
 def some_view(request):
-    # way one
-    customer = Customer(id=303)
-    customer.first_name = 'jenifer'
-    customer.last_name = 'lopez'
-    customer.phone_number = '625.451.4235x401'
-    customer.birth_date = '2010-11-04'
-    customer.email = 'jenifer@gmail.com'
-    customer.save()
+    order = Order()
+    order.customer_id = 305
+    order.save()
     
-    queryset = Customer.objects.all().order_by('id')
+    # way one
+    Order.objects.filter(id=91).delete()
 
     # way two
-    customer = Customer.objects.get(id=304)
-    customer.last_name = 'farangiiiii'
-    customer.save()
+    order = Order(id=92)
+    order.delete()
     
-    queryset = Customer.objects.all().order_by('id')
+    queryset = Order.objects.all().order_by('-id')
     
-    # way three
-    Customer.objects.filter(id=305).update(birth_date='2022-2-2')
-
-    queryset = Customer.objects.all().order_by('id')
-
     return render(request, 'shop/shop.html', {'products': list(queryset)})
