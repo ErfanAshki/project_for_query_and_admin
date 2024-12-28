@@ -4,11 +4,19 @@ from .models import Product, Cart, CartItem, Category, Comment, Customer ,Order,
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'category', 'unit_price', 'inventory', 'datetime_created']
+    list_display = ['id', 'name', 'category', 'unit_price', 'inventory', 'inventory_status', 'datetime_created']
     ordering = ['id']
     list_per_page = 20    
     list_editable = ['unit_price', 'inventory']
     
+    def inventory_status(self, product):
+        if product.inventory < 10 :
+            return 'LOW'
+        elif product.inventory > 50 : 
+            return 'HIGH'
+        else:
+            return 'MEDIUM'
+        
     
 admin.site.register(Product, ProductAdmin)
 
