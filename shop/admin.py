@@ -3,6 +3,7 @@ from django.db.models import Count
 from django.utils.html import format_html
 from django.utils.http import urlencode
 from django.urls import reverse
+from django.contrib import messages
 
 from .models import Product, Cart, CartItem, Category, Comment, Customer ,Order, OrderItem, Discount, Address
 
@@ -39,6 +40,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = [InventoryFilter, 'category']
     search_fields = ['name__istartswith']
     list_display_links = ['id', 'name']
+    actions = ['clear_inventory']
     
     def inventory_status(self, product):
         if product.inventory < 10 :
@@ -67,6 +69,11 @@ class ProductAdmin(admin.ModelAdmin):
         )
         
         return format_html(f"<a href='{url}'>{product.num_of_comments} </a>")
+    
+    @admin.action(description='Clear Inventory')
+    def clear_inventory(self, request, queryset):
+        update_count = queryset.update(inventory=0)
+        self.message_user(request, f"{update_count} inventories of products cleared.", messages.WARNING)
 
     
 admin.site.register(Product, ProductAdmin)
