@@ -198,6 +198,9 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['product__name']
     list_display_links = ['id', 'product']
     autocomplete_fields = ['product']
+    # readonly_fields =
+    # fields = 
+    # exclude =
     
     
 admin.site.register(Comment, CommentAdmin)
