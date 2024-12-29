@@ -35,6 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_select_related = ['category']
     list_filter = [InventoryFilter, 'category']
     search_fields = ['name']
+    list_display_links = ['id', 'name']
     
     def inventory_status(self, product):
         if product.inventory < 10 :
@@ -85,6 +86,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_editable = ['status']
     list_filter = ['status', ItemsFilter]
     search_fields = ['customer__first_name', 'customer__last_name']
+    list_display_links = ['id']
     
     
     def get_queryset(self, request):
@@ -106,6 +108,7 @@ class CustomerAdmin(admin.ModelAdmin):
     list_editable = ['birth_date', 'email']
     list_filter = ['orders']
     search_fields = ['first_name__istartswith', 'last_name__istartswith']
+    list_display_links = ['id', 'first_name']
     
     
 admin.site.register(Customer, CustomerAdmin)
