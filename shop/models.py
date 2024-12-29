@@ -30,6 +30,9 @@ class Product(models.Model):
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_('date of modified'))
     
+    def __str__(self):
+        return self.name
+    
 
 class Customer(models.Model):
     first_name = models.CharField(max_length=100, verbose_name=_('first_name'))    

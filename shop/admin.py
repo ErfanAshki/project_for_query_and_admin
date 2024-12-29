@@ -34,7 +34,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ['unit_price', 'inventory']
     list_select_related = ['category']
     list_filter = [InventoryFilter, 'category']
-    search_fields = ['name']
+    search_fields = ['name__istartswith']
     list_display_links = ['id', 'name']
     
     def inventory_status(self, product):
@@ -112,4 +112,18 @@ class CustomerAdmin(admin.ModelAdmin):
     
     
 admin.site.register(Customer, CustomerAdmin)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'product', 'name' , 'status', 'datetime_created']
+    ordering = ['id']
+    list_per_page = 20    
+    list_editable = ['status']
+    list_select_related = ['product']
+    list_filter = ['status']
+    search_fields = ['product__name']
+    list_display_links = ['id', 'product']
+    
+    
+admin.site.register(Comment, CommentAdmin)
 
