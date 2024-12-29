@@ -84,6 +84,9 @@ class Order(models.Model):
     objects = StatusOrderMethod()
     unpaided = UnpaidOrderManager()
     
+    def __str__(self):
+        return f"{self.customer} --> order_id :{self.id}"
+    
     
 class OrderItem(models.Model):
     order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='items')
