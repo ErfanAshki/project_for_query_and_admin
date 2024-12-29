@@ -1,5 +1,8 @@
 from django.contrib import admin
 from django.db.models import Count
+from django.utils.html import format_html
+from django.utils.http import urlencode
+from django.urls import reverse
 
 from .models import Product, Cart, CartItem, Category, Comment, Customer ,Order, OrderItem, Discount, Address
 
@@ -55,8 +58,16 @@ class ProductAdmin(admin.ModelAdmin):
     
     @admin.display(ordering='num_of_comments')
     def num_of_comments(self, product):
-        return product.num_of_comments
-            
+        url = (
+            reverse('admin:shop_comment_changelist')
+            + '?'
+            + urlencode({
+                'product__id': product.id
+            })
+        )
+        
+        return format_html(f"<a href='{url}'>{product.num_of_comments} </a>")
+
     
 admin.site.register(Product, ProductAdmin)
 
