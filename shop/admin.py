@@ -10,6 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 20    
     list_editable = ['unit_price', 'inventory']
     list_select_related = ['category']
+    list_filter = ['category', 'inventory']
     
     def inventory_status(self, product):
         if product.inventory < 10 :
@@ -32,6 +33,7 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ['id']
     list_per_page = 15    
     list_editable = ['status']
+    list_filter = ['status']
     
     
     def get_queryset(self, request):
