@@ -41,6 +41,9 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['name__istartswith']
     list_display_links = ['id', 'name']
     actions = ['clear_inventory']
+    prepopulated_fields = {
+        'slug': ['name', 'unit_price']
+    }
     
     def inventory_status(self, product):
         if product.inventory < 10 :
