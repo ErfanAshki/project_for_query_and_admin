@@ -114,6 +114,15 @@ class ItemsFilter(admin.SimpleListFilter):
     def get_queryset(self):
         queryset = super(self).get_queryset().annotate(items_count=Count('items'))
         return queryset
+    
+
+class OrderItemInline(admin.StackedInline):
+    model = OrderItem
+    fields = ['id', 'order', 'product' , 'quantity', 'unit_price']
+    extra = 1
+    min_num = 1
+    max_num = 20
+
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'customer', 'status', 'datetime_created', 'number_of_items']
@@ -123,6 +132,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['status', ItemsFilter]
     search_fields = ['customer__first_name', 'customer__last_name']
     list_display_links = ['id']
+    inlines = [OrderItemInline]
     
     
     def get_queryset(self, request):
