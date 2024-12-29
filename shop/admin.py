@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 
 from .models import Product, Cart, CartItem, Category, Comment, Customer ,Order, OrderItem, Discount, Address
 
@@ -27,10 +28,21 @@ admin.site.register(Product, ProductAdmin)
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'customer', 'status', 'datetime_created']
+    list_display = ['id', 'customer', 'status', 'datetime_created', 'number_of_items']
     ordering = ['id']
     list_per_page = 15    
     list_editable = ['status']
     
     
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('items'). \
+            annotate(items_count=Count('items'))
+    
+    @admin.display(ordering='items_count')
+    def number_of_items(self, order):
+        return order.items_count
+    
+    
 admin.site.register(Order, OrderAdmin)
+
+
