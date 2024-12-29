@@ -28,7 +28,7 @@ class InventoryFilter(admin.SimpleListFilter):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'category_title' , 'unit_price', 'inventory', 'inventory_status', 'datetime_created']
+    list_display = ['id', 'name', 'category_title' , 'unit_price', 'inventory', 'inventory_status', 'num_of_comments']
     ordering = ['id']
     list_per_page = 20    
     list_editable = ['unit_price', 'inventory']
@@ -48,7 +48,15 @@ class ProductAdmin(admin.ModelAdmin):
     @admin.display(ordering='category__title')
     def category_title(self , product):
         return product.category.title
-        
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('comments'). \
+            annotate(num_of_comments=Count('comments'))
+    
+    @admin.display(ordering='num_of_comments')
+    def num_of_comments(self, product):
+        return product.num_of_comments
+            
     
 admin.site.register(Product, ProductAdmin)
 
