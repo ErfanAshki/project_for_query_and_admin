@@ -130,6 +130,22 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Order, OrderAdmin)
 
 
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'order', 'product' , 'quantity', 'unit_price']
+    ordering = ['id']
+    list_per_page = 25
+    list_editable = ['unit_price', 'quantity']
+    list_select_related = ['order', 'product']
+    list_filter = ['quantity']
+    search_fields = ['product__name']
+    list_display_links = ['id', 'order']
+    autocomplete_fields = ['product']
+
+
+admin.site.register(OrderItem, OrderItemAdmin)
+
+
+
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name' , 'phone_number', 'birth_date', 'email']
     ordering = ['id']
@@ -152,6 +168,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['status']
     search_fields = ['product__name']
     list_display_links = ['id', 'product']
+    autocomplete_fields = ['product']
     
     
 admin.site.register(Comment, CommentAdmin)
