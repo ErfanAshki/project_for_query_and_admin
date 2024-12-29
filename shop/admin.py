@@ -51,12 +51,38 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 
 
+class ItemsFilter(admin.SimpleListFilter):
+    title = 'Items Of Orders'
+    parameter_name = 'items'
+    LESS_THAN_3 = '<3'
+    BETWEEN_3_AND_7 = '3<=7'
+    GREATER_THAN_7 = '>7'
+
+    def lookups(self, request, model_admin):
+        return [
+            (ItemsFilter.LESS_THAN_3, 'Ok'),
+            (ItemsFilter.BETWEEN_3_AND_7, 'Normal'),
+            (ItemsFilter.GREATER_THAN_7, 'Lot')
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == ItemsFilter.LESS_THAN_3:
+            return queryset.filter(items_count__lt=3)
+        elif self.value() == ItemsFilter.BETWEEN_3_AND_7:
+            return queryset.filter(items_count__lte=7, items_count__gte=3)
+        elif self.value() == ItemsFilter.GREATER_THAN_7:
+            return queryset.filter(items_count__gt=7)
+    
+    def get_queryset(self):
+        queryset = super(self).get_queryset().annotate(items_count=Count('items'))
+        return queryset
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'customer', 'status', 'datetime_created', 'number_of_items']
     ordering = ['id']
     list_per_page = 15    
     list_editable = ['status']
-    list_filter = ['status']
+    list_filter = ['status', ItemsFilter]
     
     
     def get_queryset(self, request):
