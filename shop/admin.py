@@ -29,6 +29,12 @@ class InventoryFilter(admin.SimpleListFilter):
             return queryset.filter(inventory__range=(3, 10))
         elif self.value() == InventoryFilter.GREATER_THAN_10:
             return queryset.filter(inventory__gt=10)
+        
+        
+class CommentInline(admin.StackedInline):
+    model = Comment
+    fields = ['id', 'product', 'name' , 'status', 'datetime_created']
+    extra = 1
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -44,6 +50,7 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ['name', 'unit_price']
     }
+    inlines = [CommentInline]
     
     def inventory_status(self, product):
         if product.inventory < 10 :
