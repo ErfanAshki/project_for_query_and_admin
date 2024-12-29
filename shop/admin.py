@@ -163,6 +163,12 @@ class OrderItemAdmin(admin.ModelAdmin):
     search_fields = ['product__name']
     list_display_links = ['id', 'order']
     autocomplete_fields = ['product']
+    actions = ['clear_quantity']
+    
+    @admin.action(description='Clear Quantity')
+    def clear_quantity(self, request, queryset):
+        update_count = queryset.update(quantity=0)
+        self.message_user(request, f"{update_count} quantities of products cleared.", messages.ERROR)
 
 
 admin.site.register(OrderItem, OrderItemAdmin)
