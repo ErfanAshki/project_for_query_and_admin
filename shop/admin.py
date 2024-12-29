@@ -130,13 +130,36 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Order, OrderAdmin)
 
 
+class QuantityFilter(admin.SimpleListFilter):
+    title = 'Quantity Status'
+    parameter_name = 'quantity'
+    LESS_THAN_3 = '<3'
+    BETWEEN_3_AND_10 = '3<=10'
+    GREATER_THAN_10 = '>10'
+
+    def lookups(self, request, model_admin):
+        return [
+            (QuantityFilter.LESS_THAN_3, 'Ok'),
+            (QuantityFilter.BETWEEN_3_AND_10, 'Good'),
+            (QuantityFilter.GREATER_THAN_10, 'Very Good')
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == QuantityFilter.LESS_THAN_3:
+            return queryset.filter(quantity__lt=3)
+        elif self.value() == QuantityFilter.BETWEEN_3_AND_10:
+            return queryset.filter(quantity__range=(3, 10))
+        elif self.value() == QuantityFilter.GREATER_THAN_10:
+            return queryset.filter(quantity__gt=10)
+
+
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'product' , 'quantity', 'unit_price']
     ordering = ['id']
     list_per_page = 25
     list_editable = ['unit_price', 'quantity']
     list_select_related = ['order', 'product']
-    list_filter = ['quantity']
+    list_filter = [QuantityFilter]
     search_fields = ['product__name']
     list_display_links = ['id', 'order']
     autocomplete_fields = ['product']
