@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _ 
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
@@ -25,7 +26,7 @@ class Product(models.Model):
     slug = models.SlugField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to='product_image', null=True, blank=True)
-    inventory = models.PositiveSmallIntegerField()
+    inventory = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     discount = models.ManyToManyField('Discount', blank=True, related_name='products')
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_('date of modified'))
