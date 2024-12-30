@@ -2,12 +2,16 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _ 
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
     title = models.CharField(max_length=200, verbose_name=_('name'))
     description = models.TextField(verbose_name=_('body'), blank=True)
     top_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+')
+    
+    def __str__(self):
+        return self.title
     
 
 class Discount(models.Model):
@@ -22,10 +26,13 @@ class Product(models.Model):
     slug = models.SlugField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to='product_image', null=True, blank=True)
-    inventory = models.PositiveSmallIntegerField()
+    inventory = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     discount = models.ManyToManyField('Discount', blank=True, related_name='products')
     datetime_created = models.DateTimeField(default=timezone.now , verbose_name=_('date of created'))
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_('date of modified'))
+    
+    def __str__(self):
+        return self.name
     
 
 class Customer(models.Model):
@@ -80,6 +87,9 @@ class Order(models.Model):
     # manager
     objects = StatusOrderMethod()
     unpaided = UnpaidOrderManager()
+    
+    def __str__(self):
+        return f"{self.customer} --> order_id :{self.id}"
     
     
 class OrderItem(models.Model):
